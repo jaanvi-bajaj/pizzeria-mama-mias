@@ -8,7 +8,7 @@ import { Pizza, Heart, ChefHat } from "lucide-react";
 import heroImage from '@assets/generated_images/restaurant_interior_cozy_2610ee16.png';
 
 const milestones = [
-  { year: "1985", title: "Opening Day", description: "Mama Maria opened the first location in Naples" },
+  { year: "1985", title: "Opening Day", description: "Jaanvi Bajaj opened the first location in Naples" },
   { year: "1995", title: "Expansion", description: "Opened second location due to popular demand" },
   { year: "2005", title: "International Growth", description: "First international location in Dubai" },
   { year: "2015", title: "30th Anniversary", description: "Celebrating three decades of excellence" },
@@ -41,7 +41,7 @@ export default function About() {
             <FeatureCard
               icon={Pizza}
               title="Our Story"
-              description="Founded by Maria Rossi, who brought her family's traditional pizza recipes from Naples, Italy. For over three decades, we've been serving authentic Italian pizza to our community with love and dedication."
+              description="Founded by Jaanvi Bajaj, who brought her family's traditional pizza recipes from Naples, Italy. For over three decades, we've been serving authentic Italian pizza to our community with love and dedication."
             />
             <FeatureCard
               icon={Heart}
@@ -51,7 +51,7 @@ export default function About() {
             <FeatureCard
               icon={ChefHat}
               title="Our Team"
-              description="Our chefs are trained in the art of traditional Italian pizza making, ensuring every pizza that leaves our kitchen meets the high standards set by Mama Maria herself."
+              description="Our chefs are trained in the art of traditional Italian pizza making, ensuring every pizza that leaves our kitchen meets the high standards set by Jaanvi herself."
             />
           </div>
         </div>
