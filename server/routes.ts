@@ -2,8 +2,9 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
-import { insertOrderSchema, insertReservationSchema, insertTestimonialSchema } from "@shared/schema";
+import { insertOrderSchema, insertOrderItemSchema, insertReservationSchema, insertTestimonialSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
+import { z } from "zod";
 
 // WebSocket clients tracking
 const orderClients = new Map<string, Set<WebSocket>>();
@@ -79,14 +80,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { order, items } = req.body;
       
-      const validationResult = insertOrderSchema.safeParse(order);
-      if (!validationResult.success) {
+      // Validate order
+      const orderValidation = insertOrderSchema.safeParse(order);
+      if (!orderValidation.success) {
         return res.status(400).json({ 
-          message: fromZodError(validationResult.error).message 
+          message: fromZodError(orderValidation.error).message 
         });
       }
 
-      const result = await storage.createOrder(validationResult.data, items);
+      // Validate order items array
+      const itemsValidation = z.array(insertOrderItemSchema.omit({ orderId: true })).safeParse(items);
+      if (!itemsValidation.success) {
+        return res.status(400).json({ 
+          message: fromZodError(itemsValidation.error).message 
+        });
+      }
+
+      const result = await storage.createOrder(orderValidation.data, itemsValidation.data);
       
       // Broadcast new order notification
       broadcastOrderUpdate(result.order.orderNumber, {

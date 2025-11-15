@@ -95,15 +95,15 @@ export default function Checkout() {
           city: formData.city,
           postalCode: formData.postalCode,
           deliveryInstructions: formData.instructions || null,
-          subtotal: subtotal,
-          deliveryFee: deliveryFee,
-          total: total,
+          subtotal: subtotal.toFixed(2),
+          deliveryFee: deliveryFee.toFixed(2),
+          total: total.toFixed(2),
           status: "pending",
         },
         items: cartItems.map(item => ({
           itemName: item.name,
           quantity: item.quantity,
-          price: item.price * 3.67,
+          price: (item.price * 3.67).toFixed(2),
         })),
       };
 

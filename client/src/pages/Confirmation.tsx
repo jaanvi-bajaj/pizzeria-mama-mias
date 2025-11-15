@@ -21,7 +21,7 @@ export default function Confirmation() {
   const [orderStatus, setOrderStatus] = useState<string>("");
   const wsRef = useRef<WebSocket | null>(null);
 
-  const params = new URLSearchParams(location.split('?')[1] || '');
+  const params = new URLSearchParams(window.location.search);
   const orderNumber = params.get('orderNumber');
 
   const { data: orderData, isLoading } = useQuery<{ order: Order; items: OrderItem[] }>({
