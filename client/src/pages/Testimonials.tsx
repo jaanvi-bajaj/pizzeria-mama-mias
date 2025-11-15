@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import TestimonialCard from "@/components/TestimonialCard";
@@ -10,13 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import type { Testimonial } from "@shared/schema";
 import heroImage from '@assets/generated_images/happy_diners_together_882df976.png';
-
-const reviews = [
-  { name: "John Smith", rating: 5, comment: "Best pizza in Dubai! The wood-fired oven makes all the difference.", date: "January 10, 2025" },
-  { name: "Sarah Johnson", rating: 5, comment: "Authentic Italian taste. Feels like eating in Naples!", date: "January 8, 2025" },
-  { name: "Ahmed Al-Mansouri", rating: 4, comment: "Great atmosphere and delicious food. Highly recommended!", date: "January 5, 2025" },
-];
 
 export default function Testimonials() {
   const [cartCount, setCartCount] = useState(0);
@@ -29,10 +26,38 @@ export default function Testimonials() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const { toast } = useToast();
 
+  const { data: reviews = [], isLoading } = useQuery<Testimonial[]>({
+    queryKey: ["/api/testimonials"],
+  });
+
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     setCartCount(cart.reduce((sum: number, item: any) => sum + item.quantity, 0));
   }, []);
+
+  const createTestimonialMutation = useMutation({
+    mutationFn: async (data: any) => {
+      const response = await apiRequest("POST", "/api/testimonials", data);
+      return await response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Thank you for your review!",
+        description: "It has been submitted for approval.",
+      });
+      setFormData({ name: "", review: "" });
+      setRating(0);
+      setErrors({});
+      queryClient.invalidateQueries({ queryKey: ["/api/testimonials"] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error submitting review",
+        description: error.message || "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -58,14 +83,12 @@ export default function Testimonials() {
     e.preventDefault();
     
     if (validate()) {
-      console.log("Review submitted:", { ...formData, rating });
-      toast({
-        title: "Thank you for your review!",
-        description: "It has been submitted for approval.",
+      createTestimonialMutation.mutate({
+        customerName: formData.name,
+        rating,
+        comment: formData.review,
+        approved: false,
       });
-      setFormData({ name: "", review: "" });
-      setRating(0);
-      setErrors({});
     }
   };
 
@@ -140,8 +163,13 @@ export default function Testimonials() {
                   {errors.review && <p className="text-sm text-destructive mt-1">{errors.review}</p>}
                 </div>
 
-                <Button type="submit" size="lg" data-testid="button-submit-review">
-                  Submit Review
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  data-testid="button-submit-review"
+                  disabled={createTestimonialMutation.isPending}
+                >
+                  {createTestimonialMutation.isPending ? "Submitting..." : "Submit Review"}
                 </Button>
               </form>
             </CardContent>
@@ -149,11 +177,32 @@ export default function Testimonials() {
 
           <div>
             <h2 className="text-3xl font-bold mb-8 text-center">What Our Customers Say</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {reviews.map((review, index) => (
-                <TestimonialCard key={index} {...review} />
-              ))}
-            </div>
+            {isLoading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                <p className="text-muted-foreground">Loading testimonials...</p>
+              </div>
+            ) : reviews.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {reviews.map((review) => (
+                  <TestimonialCard 
+                    key={review.id} 
+                    name={review.customerName}
+                    rating={review.rating}
+                    comment={review.comment}
+                    date={new Date(review.createdAt).toLocaleDateString('en-US', { 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">No reviews yet. Be the first to leave one!</p>
+              </div>
+            )}
           </div>
         </div>
       </section>

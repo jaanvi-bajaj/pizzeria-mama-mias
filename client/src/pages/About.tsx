@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import FeatureCard from "@/components/FeatureCard";
@@ -6,18 +7,14 @@ import Timeline from "@/components/Timeline";
 import Footer from "@/components/Footer";
 import { Pizza, Heart, ChefHat } from "lucide-react";
 import heroImage from '@assets/generated_images/restaurant_interior_cozy_2610ee16.png';
-
-const milestones = [
-  { year: "1985", title: "Opening Day", description: "Jaanvi Bajaj opened the first location in Naples" },
-  { year: "1995", title: "Expansion", description: "Opened second location due to popular demand" },
-  { year: "2005", title: "International Growth", description: "First international location in Dubai" },
-  { year: "2015", title: "30th Anniversary", description: "Celebrating three decades of excellence" },
-  { year: "2020", title: "Digital Transformation", description: "Launched online ordering and delivery" },
-  { year: "2025", title: "Today", description: "Serving thousands of happy customers across multiple locations" },
-];
+import type { Timeline as TimelineType } from "@shared/schema";
 
 export default function About() {
   const [cartCount, setCartCount] = useState(0);
+
+  const { data: timelineItems = [], isLoading } = useQuery<TimelineType[]>({
+    queryKey: ["/api/timeline"],
+  });
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -67,7 +64,14 @@ export default function About() {
           </p>
           
           <div className="max-w-4xl mx-auto">
-            <Timeline items={milestones} />
+            {isLoading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                <p className="text-muted-foreground">Loading timeline...</p>
+              </div>
+            ) : (
+              <Timeline items={timelineItems} />
+            )}
           </div>
         </div>
       </section>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
@@ -9,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Clock, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 import heroImage from '@assets/generated_images/elegant_dining_setup_e50d09b1.png';
 
 export default function Reservations() {
@@ -29,6 +31,36 @@ export default function Reservations() {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     setCartCount(cart.reduce((sum: number, item: any) => sum + item.quantity, 0));
   }, []);
+
+  const createReservationMutation = useMutation({
+    mutationFn: async (data: any) => {
+      const response = await apiRequest("POST", "/api/reservations", data);
+      return await response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Reservation submitted successfully!",
+        description: "We will contact you shortly to confirm your booking.",
+      });
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        date: "",
+        time: "",
+        guests: "",
+        notes: "",
+      });
+      setErrors({});
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error submitting reservation",
+        description: error.message || "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -77,21 +109,16 @@ export default function Reservations() {
     e.preventDefault();
     
     if (validate()) {
-      console.log("Reservation submitted:", formData);
-      toast({
-        title: "Reservation submitted successfully!",
-        description: "We will contact you shortly to confirm your booking.",
+      createReservationMutation.mutate({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        date: formData.date,
+        time: formData.time,
+        guests: parseInt(formData.guests),
+        notes: formData.notes || null,
+        status: "pending",
       });
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        date: "",
-        time: "",
-        guests: "",
-        notes: "",
-      });
-      setErrors({});
     }
   };
 
@@ -224,8 +251,14 @@ export default function Reservations() {
                   />
                 </div>
 
-                <Button type="submit" size="lg" className="w-full md:w-auto" data-testid="button-book-now">
-                  Book Now
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  className="w-full"
+                  data-testid="button-submit-reservation"
+                  disabled={createReservationMutation.isPending}
+                >
+                  {createReservationMutation.isPending ? "Submitting..." : "Submit Reservation"}
                 </Button>
               </form>
             </CardContent>

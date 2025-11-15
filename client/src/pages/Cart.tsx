@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { imageMap } from "@/lib/imageMap";
 
 interface CartItem {
   id: string;
@@ -13,7 +14,7 @@ interface CartItem {
   description: string;
   price: number;
   category: string;
-  image: string;
+  imageUrl: string;
   quantity: number;
 }
 
@@ -85,7 +86,7 @@ export default function Cart() {
                   <CardContent className="p-6">
                     <div className="flex gap-6">
                       <img 
-                        src={item.image} 
+                        src={imageMap[item.imageUrl] || item.imageUrl} 
                         alt={item.name}
                         className="w-24 h-24 object-cover rounded-md flex-shrink-0"
                       />

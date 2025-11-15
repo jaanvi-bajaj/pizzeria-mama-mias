@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
+import { useMutation } from "@tanstack/react-query";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 interface CartItem {
   id: string;
@@ -18,6 +21,7 @@ interface CartItem {
 
 export default function Checkout() {
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -37,6 +41,24 @@ export default function Checkout() {
     }
     setCartItems(cart);
   }, [setLocation]);
+
+  const createOrderMutation = useMutation({
+    mutationFn: async (orderData: any) => {
+      const response = await apiRequest("POST", "/api/orders", orderData);
+      return await response.json();
+    },
+    onSuccess: (data: any) => {
+      localStorage.removeItem('cart');
+      setLocation(`/confirmation?orderNumber=${data.order.orderNumber}`);
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error placing order",
+        description: error.message || "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -59,16 +81,33 @@ export default function Checkout() {
     
     if (validate()) {
       const orderNumber = 'MM' + Math.random().toString(36).substr(2, 9).toUpperCase();
-      localStorage.setItem('lastOrder', JSON.stringify({
-        orderNumber,
-        items: cartItems,
-        customerInfo: formData,
-        subtotal,
-        deliveryFee,
-        total,
-      }));
-      localStorage.removeItem('cart');
-      setLocation('/confirmation');
+      const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity * 3.67), 0);
+      const deliveryFee = 15;
+      const total = subtotal + deliveryFee;
+
+      const orderData = {
+        order: {
+          orderNumber,
+          customerName: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          deliveryAddress: formData.address,
+          city: formData.city,
+          postalCode: formData.postalCode,
+          deliveryInstructions: formData.instructions || null,
+          subtotal: subtotal,
+          deliveryFee: deliveryFee,
+          total: total,
+          status: "pending",
+        },
+        items: cartItems.map(item => ({
+          itemName: item.name,
+          quantity: item.quantity,
+          price: item.price * 3.67,
+        })),
+      };
+
+      createOrderMutation.mutate(orderData);
     }
   };
 
@@ -174,8 +213,14 @@ export default function Checkout() {
                       </div>
                     </div>
 
-                    <Button type="submit" size="lg" className="w-full" data-testid="button-place-order">
-                      Place Order
+                    <Button 
+                      type="submit" 
+                      size="lg" 
+                      className="w-full" 
+                      data-testid="button-place-order"
+                      disabled={createOrderMutation.isPending}
+                    >
+                      {createOrderMutation.isPending ? "Placing Order..." : "Place Order"}
                     </Button>
                   </form>
                 </CardContent>

@@ -126,7 +126,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Order not found" });
       }
 
-      // Broadcast status update
+      // Broadcast status update to subscribed clients
       broadcastOrderUpdate(order.orderNumber, {
         type: "order_status_updated",
         order,
