@@ -1,0 +1,78 @@
+import { useState, useEffect } from "react";
+import Navigation from "@/components/Navigation";
+import Hero from "@/components/Hero";
+import FeatureCard from "@/components/FeatureCard";
+import Timeline from "@/components/Timeline";
+import Footer from "@/components/Footer";
+import { Pizza, Heart, ChefHat } from "lucide-react";
+import heroImage from '@assets/generated_images/restaurant_interior_cozy_2610ee16.png';
+
+const milestones = [
+  { year: "1985", title: "Opening Day", description: "Mama Maria opened the first location in Naples" },
+  { year: "1995", title: "Expansion", description: "Opened second location due to popular demand" },
+  { year: "2005", title: "International Growth", description: "First international location in Dubai" },
+  { year: "2015", title: "30th Anniversary", description: "Celebrating three decades of excellence" },
+  { year: "2020", title: "Digital Transformation", description: "Launched online ordering and delivery" },
+  { year: "2025", title: "Today", description: "Serving thousands of happy customers across multiple locations" },
+];
+
+export default function About() {
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    setCartCount(cart.reduce((sum: number, item: any) => sum + item.quantity, 0));
+  }, []);
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Navigation cartItemCount={cartCount} />
+      
+      <Hero
+        backgroundImage={heroImage}
+        title="About Us"
+        subtitle="Our story of passion and tradition"
+        height="h-[50vh]"
+      />
+
+      <section className="py-16 md:py-20 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <FeatureCard
+              icon={Pizza}
+              title="Our Story"
+              description="Founded by Maria Rossi, who brought her family's traditional pizza recipes from Naples, Italy. For over three decades, we've been serving authentic Italian pizza to our community with love and dedication."
+            />
+            <FeatureCard
+              icon={Heart}
+              title="Our Philosophy"
+              description="We believe in using only the finest ingredients, traditional cooking methods, and treating every customer like family. Our wood-fired oven, imported from Italy, gives our pizzas that authentic taste."
+            />
+            <FeatureCard
+              icon={ChefHat}
+              title="Our Team"
+              description="Our chefs are trained in the art of traditional Italian pizza making, ensuring every pizza that leaves our kitchen meets the high standards set by Mama Maria herself."
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 md:py-20 bg-accent">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-foreground">
+            Our Journey Through Time
+          </h2>
+          <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
+            From our humble beginnings to becoming a beloved Italian restaurant
+          </p>
+          
+          <div className="max-w-4xl mx-auto">
+            <Timeline items={milestones} />
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
+}
