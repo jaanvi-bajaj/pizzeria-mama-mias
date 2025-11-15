@@ -1,0 +1,445 @@
+Mama Mia's Pizzeria - Full-Stack Restaurant Website
+
+Build a complete full-stack restaurant website for "Mama Mia's Pizzeria" - an authentic Italian pizzeria in Dubai Marina. Use HTML, CSS, JavaScript, Node.js, Express, and a database (MySQL/PostgreSQL/SQLite).
+
+Color Scheme
+
+Italian Red: #B22222
+
+Italian Green: #009246
+
+Italian Cream: #FFF8E7
+
+Dark Gray: #1F2937 (for footers)
+
+Pages & Features
+
+1. Home Page (index.html)
+
+Hero Section:
+
+Large hero banner with background image: pizza in wood-fired oven
+
+Headline: "Welcome to Mama Mia's Pizzeria"
+
+Subtitle: "Authentic Italian Pizza Made with Love Since 1985"
+
+Two CTA buttons: "View Menu" and "Open Full App"
+
+Why Choose Us Section:
+
+Three feature cards with icons:
+
+Fresh Ingredients (leaf icon) - "We use only the freshest, locally-sourced ingredients for authentic Italian taste"
+
+Traditional Recipes (chef hat icon) - "Passed down through generations of Italian chefs from Naples"
+
+Wood-Fired Oven (flame icon) - "Cooked to perfection in our authentic Italian wood-fired oven"
+
+Featured Items Section:
+
+Three category cards:
+
+Specialty Pizzas (pizza icon) - "From classic Margherita to our signature Quattro Formaggi"
+
+Fresh Appetizers (salad icon) - "Start your meal with authentic Italian antipasti"
+
+Premium Drinks (wine icon) - "Fine wines and refreshing beverages to complement your meal"
+
+Call to Action Section:
+
+Red background with white text
+
+"Experience Our Full Restaurant App"
+
+"Browse our complete menu, make reservations, and manage your orders"
+
+Button to open full app
+
+2. Menu Page (menu.html)
+
+Header: Red banner with "Our Menu" title
+
+Filter Buttons:
+
+All Items, Pizzas, Appetizers, Salads, Desserts, Beverages
+
+Active filter highlighted in red
+
+Menu Items Display:
+
+Grid layout (3 columns on desktop, responsive)
+
+Each card shows:
+
+Image (use stock photos from Pexels or similar)
+
+Category badge (yellow)
+
+Name
+
+Description
+
+Price in AED (multiply USD price × 3.67)
+
+"Add to Cart" button (red)
+
+Sample Menu Items:
+
+Pizzas:
+
+Margherita - $12 - "Classic tomato sauce, fresh mozzarella, basil"
+
+Pepperoni - $14 - "Tomato sauce, mozzarella, pepperoni"
+
+Quattro Formaggi - $16 - "Four cheese blend: mozzarella, parmesan, gorgonzola, fontina"
+
+Vegetarian - $15 - "Bell peppers, mushrooms, onions, olives, tomatoes"
+
+Meat Lovers - $18 - "Pepperoni, sausage, bacon, ham"
+
+Appetizers:
+
+Bruschetta - $8 - "Toasted bread, tomatoes, garlic, basil"
+
+Garlic Bread - $6 - "Fresh baked with garlic butter"
+
+Mozzarella Sticks - $9 - "Crispy fried with marinara sauce"
+
+Salads:
+
+Caesar Salad - $10 - "Romaine, parmesan, croutons, Caesar dressing"
+
+Caprese Salad - $12 - "Fresh mozzarella, tomatoes, basil, balsamic"
+
+Desserts:
+
+Tiramisu - $8 - "Classic Italian coffee-flavored dessert"
+
+Cannoli - $7 - "Sicilian pastry with sweet ricotta filling"
+
+Beverages:
+
+Soft Drinks - $3 - "Coca-Cola, Sprite, Fanta"
+
+Italian Soda - $4 - "Flavored sparkling water"
+
+Coffee - $4 - "Espresso, Cappuccino, Latte"
+
+3. About Page (about.html)
+
+Hero Banner: Background image of restaurant interior
+
+Story Section:
+
+Three info cards:
+
+Our Story (pizza icon) - "Founded by Maria Rossi, who brought her family's traditional pizza recipes from Naples, Italy. For over three decades, we've been serving authentic Italian pizza to our community with love and dedication."
+
+Our Philosophy (heart icon) - "We believe in using only the finest ingredients, traditional cooking methods, and treating every customer like family. Our wood-fired oven, imported from Italy, gives our pizzas that authentic taste."
+
+Our Team (chef hat icon) - "Our chefs are trained in the art of traditional Italian pizza making, ensuring every pizza that leaves our kitchen meets the high standards set by Mama Maria herself."
+
+Timeline Section: "Our Journey Through Time"
+
+Display timeline milestones:
+
+1985: "Opening Day" - "Mama Maria opened the first location in Naples"
+
+1995: "Expansion" - "Opened second location due to popular demand"
+
+2005: "International Growth" - "First international location in Dubai"
+
+2015: "30th Anniversary" - "Celebrating three decades of excellence"
+
+2020: "Digital Transformation" - "Launched online ordering and delivery"
+
+2025: "Today" - "Serving thousands of happy customers across multiple locations"
+
+4. Reservations Page (reservations.html)
+
+Hero Banner: Background image of dining area
+
+Reservation Form:
+
+Fields:
+
+Full Name* (validation: 2+ characters, letters only)
+
+Email Address* (validation: valid email format)
+
+Phone Number* (validation: valid phone format, 8+ digits)
+
+Reservation Date* (validation: future date, max 3 months ahead)
+
+Time* (validation: between 11:00 AM - 12:00 AM)
+
+Number of Guests* (validation: 1-20)
+
+Special Requests (textarea, optional)
+
+Info Cards:
+
+Location: Dubai Marina
+
+Hours: 11 AM - 12 AM
+
+Capacity: Up to 20 Guests
+
+Submit button: "Book Now" (red)
+
+Success message: "Reservation submitted successfully! We will contact you shortly to confirm your booking."
+
+5. Testimonials Page (testimonials.html)
+
+Hero Banner: Background image of happy customers
+
+Review Submission Form:
+
+Your Name* (validation: 2+ characters, letters only)
+
+Rating* (1-5 stars, clickable/hoverable)
+
+Your Review* (validation: 10-500 characters)
+
+Submit button: "Submit Review"
+
+Success message: "Thank you for your review! It has been submitted for approval."
+
+Reviews Display:
+
+Grid of review cards (3 columns)
+
+Each card shows:
+
+Customer initial in colored circle
+
+Customer name
+
+Star rating (yellow stars)
+
+Review text in quotes
+
+Date
+
+Sample Reviews:
+
+John Smith - 5 stars - "Best pizza in Dubai! The wood-fired oven makes all the difference."
+
+Sarah Johnson - 5 stars - "Authentic Italian taste. Feels like eating in Naples!"
+
+Ahmed Al-Mansouri - 4 stars - "Great atmosphere and delicious food. Highly recommended!"
+
+6. Shopping Cart (cart.html)
+
+Features:
+
+Display added items with image, name, price, quantity
+
+Quantity controls (+/- buttons)
+
+Remove item button
+
+Subtotal calculation
+
+"Proceed to Checkout" button
+
+"Continue Shopping" link
+
+Empty cart message: "Your cart is empty. Start adding some delicious items!"
+
+7. Checkout Page (checkout.html)
+
+Delivery Information Form:
+
+Full Name*
+
+Email*
+
+Phone*
+
+Delivery Address*
+
+City*
+
+Postal Code*
+
+Delivery Instructions (optional)
+
+Order Summary:
+
+List of items
+
+Subtotal
+
+Delivery Fee: AED 15
+
+Total
+
+Place Order Button (red, prominent)
+
+8. Order Confirmation Page (confirmation.html)
+
+Success Message:
+
+Green checkmark icon
+
+"Order Confirmed!"
+
+"Thank you for your order!"
+
+Order number (generated)
+
+Estimated delivery time: 30-45 minutes
+
+Order summary
+
+"Track Order" button
+
+"Back to Home" button
+
+Footer (All Pages)
+
+Three columns:
+
+Contact Us
+
+📍 Sheikh Zayed Road, Dubai Marina, Dubai, United Arab Emirates
+
+📞 +971 4 123 4567
+
+✉️ info@mamamiaspizzeria.ae
+
+Opening Hours
+
+Sunday - Thursday: 11:00 AM - 11:00 PM
+
+Friday - Saturday: 11:00 AM - 12:00 AM
+
+Location
+
+"View on Google Maps" button (links to Dubai Marina)
+
+Copyright: © 2025 Mama Mia's Pizzeria. All rights reserved.
+
+Navigation (All Pages)
+
+Sticky navigation bar with logo (pizza icon) and links:
+
+Home | Menu | About | Reservations | Testimonials | Cart (with badge showing item count)
+
+Backend Requirements
+
+Database Tables:
+
+menu_items:
+
+id, name, description, price (USD), category, image_url, available (boolean)
+
+reservations:
+
+id, name, email, phone, date, time, guests, notes, status (pending/confirmed/cancelled), created_at
+
+comments (testimonials):
+
+id, customer_name, rating, comment, approved (boolean), created_at
+
+orders:
+
+id, customer_name, email, phone, delivery_address, city, postal_code, delivery_instructions, subtotal, delivery_fee, total, status, created_at
+
+order_items:
+
+id, order_id (foreign key), item_name, quantity, price
+
+history (timeline):
+
+id, year, title, description
+
+API Endpoints:
+
+GET /api/menu - Get all menu items (filtered by available=true)GET /api/menu/:category - Get items by category
+
+POST /api/reservations - Create reservationGET /api/reservations - Get all reservations (admin)
+
+GET /api/testimonials - Get approved testimonialsPOST /api/testimonials - Submit new testimonial (starts as approved=false)
+
+POST /api/orders - Create orderGET /api/orders/:id - Get order details
+
+GET /api/history - Get timeline items
+
+Technical Requirements:
+
+Frontend:
+
+Vanilla JavaScript (no frameworks)
+
+Responsive CSS (mobile-first)
+
+Form validation on client-side
+
+LocalStorage for cart management
+
+Fetch API for backend calls
+
+Smooth animations and hover effects
+
+Backend:
+
+Node.js with Express
+
+RESTful API
+
+Input validation and sanitization
+
+CORS enabled
+
+Error handling
+
+Environment variables for config
+
+Styling:
+
+Modern, clean design
+
+Box shadows for depth
+
+Rounded corners (8-12px)
+
+Hover animations (scale, translate-y, shadow)
+
+Smooth transitions
+
+Responsive breakpoints: mobile (<768px), tablet (768-1024px), desktop (>1024px)
+
+Images:
+
+Use stock photos from Pexels for:
+
+Pizza in wood-fired oven (hero)
+
+Various pizza types
+
+Restaurant interior
+
+Dining area
+
+Appetizers, salads, desserts, beverages
+
+Additional Features:
+
+Cart persists in localStorage
+
+Real-time cart count in navigation
+
+Form validation with error messages
+
+Success/error notifications
+
+Loading states for API calls
+
+Empty states (empty cart, no reviews, etc.)
+
+Accessible (semantic HTML, ARIA labels)
+
+Build this as a production-ready, fully functional restaurant website with clean code, proper error handling, and smooth user experience.
