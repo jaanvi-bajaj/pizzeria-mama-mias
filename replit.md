@@ -55,6 +55,7 @@ Preferred communication style: Simple, everyday language.
 - `reservations` - Table booking requests with guest count and special requirements
 - `testimonials` - Customer reviews with approval workflow
 - `timeline` - Restaurant history milestones for the About page
+- `awards` - Restaurant awards and recognitions with year, title, organization, description, and display order
 
 **Schema Validation**: Drizzle-Zod integration generates Zod schemas from database schema definitions, ensuring type safety between database and application layers.
 
@@ -120,6 +121,22 @@ Generated images are stored in `attached_assets/generated_images/` and imported 
 - Italian wine bottles display for homepage CTA section
 
 ## Recent Changes (November 2025)
+
+### Awards Section Implementation (November 15, 2025)
+- **Database Schema**: Added `awards` table with fields: id, year, title, organization, description, order
+- **Seed Data**: Populated database with 5 prestigious awards:
+  - Michelin Bib Gourmand 2024
+  - Best Italian Restaurant Dubai 2023
+  - TripAdvisor Travelers' Choice 2023
+  - Best Pizza in UAE 2022
+  - Hospitality Excellence Award 2021
+- **Backend API**: New GET /api/awards endpoint with storage layer integration
+- **Frontend Display**: Awards section added to About page showing all awards in responsive 3-column grid
+- **Design Integration**: Uses existing Card/Badge components with Trophy icon header and hover elevation effects
+- **Assignment Compliance**: Fulfills CS128 requirement "List the awards your company has received extracted from JSON/database"
+- **Testing**: End-to-end Playwright tests confirm all 5 awards display correctly with accurate data
+
+## Earlier Changes (November 2025)
 
 ### Payment Processing Integration
 - **Payment Method Selection**: Added radio button selection between "Cash on Delivery" and "Credit/Debit Card" on checkout page
