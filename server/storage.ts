@@ -6,6 +6,7 @@ import {
   reservations, 
   testimonials, 
   timeline,
+  awards,
   type MenuItem,
   type InsertMenuItem,
   type Order,
@@ -18,6 +19,7 @@ import {
   type InsertTestimonial,
   type Timeline,
   type InsertTimeline,
+  type Award,
 } from "@shared/schema";
 import { eq, and, desc } from "drizzle-orm";
 
@@ -51,6 +53,9 @@ export interface IStorage {
   // Timeline
   getTimelineItems(): Promise<Timeline[]>;
   createTimelineItem(item: InsertTimeline): Promise<Timeline>;
+
+  // Awards
+  getAwards(): Promise<Award[]>;
 }
 
 export class DbStorage implements IStorage {
@@ -183,6 +188,11 @@ export class DbStorage implements IStorage {
   async createTimelineItem(item: InsertTimeline): Promise<Timeline> {
     const [created] = await db.insert(timeline).values(item).returning();
     return created;
+  }
+
+  // Awards
+  async getAwards(): Promise<Award[]> {
+    return await db.select().from(awards).orderBy(awards.order);
   }
 }
 

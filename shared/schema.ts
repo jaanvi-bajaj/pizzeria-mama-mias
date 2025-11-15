@@ -127,3 +127,20 @@ export const insertTimelineSchema = createInsertSchema(timeline).omit({
 
 export type Timeline = typeof timeline.$inferSelect;
 export type InsertTimeline = z.infer<typeof insertTimelineSchema>;
+
+// Awards
+export const awards = pgTable("awards", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  year: text("year").notNull(),
+  title: text("title").notNull(),
+  organization: text("organization").notNull(),
+  description: text("description").notNull(),
+  order: integer("order").notNull(),
+});
+
+export const insertAwardSchema = createInsertSchema(awards).omit({
+  id: true,
+});
+
+export type Award = typeof awards.$inferSelect;
+export type InsertAward = z.infer<typeof insertAwardSchema>;

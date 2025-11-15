@@ -1,5 +1,5 @@
 import { db } from "./index";
-import { menuItems, timeline } from "@shared/schema";
+import { menuItems, timeline, awards } from "@shared/schema";
 
 async function seed() {
   console.log("Seeding database...");
@@ -7,6 +7,7 @@ async function seed() {
   // Clear existing data
   await db.delete(menuItems);
   await db.delete(timeline);
+  await db.delete(awards);
 
   // Seed menu items
   const menuData = [
@@ -39,6 +40,17 @@ async function seed() {
   ];
 
   await db.insert(timeline).values(timelineData);
+
+  // Seed awards
+  const awardsData = [
+    { year: "2024", title: "Michelin Bib Gourmand", organization: "Michelin Guide", description: "Recognized for exceptional quality food at moderate prices", order: 1 },
+    { year: "2023", title: "Best Italian Restaurant Dubai", organization: "Dubai Food Awards", description: "Voted #1 Italian restaurant in Dubai by local food critics", order: 2 },
+    { year: "2023", title: "TripAdvisor Travelers' Choice", organization: "TripAdvisor", description: "Among the top 10% of restaurants worldwide based on reviews", order: 3 },
+    { year: "2022", title: "Best Pizza in UAE", organization: "Middle East Food Excellence Awards", description: "Awarded for authentic Neapolitan pizza craftsmanship", order: 4 },
+    { year: "2021", title: "Hospitality Excellence Award", organization: "Dubai Tourism", description: "Outstanding service and customer satisfaction", order: 5 },
+  ];
+
+  await db.insert(awards).values(awardsData);
 
   console.log("Database seeded successfully!");
 }

@@ -262,5 +262,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Awards Routes
+  app.get("/api/awards", async (req, res) => {
+    try {
+      const awards = await storage.getAwards();
+      res.json(awards);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   return httpServer;
 }
