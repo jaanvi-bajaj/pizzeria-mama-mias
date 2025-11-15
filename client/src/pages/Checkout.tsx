@@ -9,8 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { CreditCard, Banknote } from "lucide-react";
 
 interface CartItem {
   id: string;
@@ -31,6 +33,12 @@ export default function Checkout() {
     city: "",
     postalCode: "",
     instructions: "",
+  });
+  const [paymentMethod, setPaymentMethod] = useState<"cash" | "card">("cash");
+  const [cardData, setCardData] = useState({
+    cardNumber: "",
+    expiry: "",
+    cvv: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -60,6 +68,20 @@ export default function Checkout() {
     },
   });
 
+  const formatCardNumber = (value: string) => {
+    const cleaned = value.replace(/\D/g, '');
+    const chunks = cleaned.match(/.{1,4}/g);
+    return chunks ? chunks.join('-').substring(0, 19) : cleaned;
+  };
+
+  const formatExpiry = (value: string) => {
+    const cleaned = value.replace(/\D/g, '');
+    if (cleaned.length >= 2) {
+      return cleaned.substring(0, 2) + '/' + cleaned.substring(2, 6);
+    }
+    return cleaned;
+  };
+
   const validate = () => {
     const newErrors: Record<string, string> = {};
 
@@ -71,6 +93,19 @@ export default function Checkout() {
     if (!formData.address.trim()) newErrors.address = "Address is required";
     if (!formData.city.trim()) newErrors.city = "City is required";
     if (!formData.postalCode.trim()) newErrors.postalCode = "Postal code is required";
+
+    if (paymentMethod === "card") {
+      const cleanedCard = cardData.cardNumber.replace(/\D/g, '');
+      if (cleanedCard.length !== 16) {
+        newErrors.cardNumber = "Card number must be 16 digits";
+      }
+      if (!/^\d{2}\/\d{4}$/.test(cardData.expiry)) {
+        newErrors.expiry = "Expiry must be in MM/YYYY format";
+      }
+      if (!/^\d{3,4}$/.test(cardData.cvv)) {
+        newErrors.cvv = "CVV must be 3 or 4 digits";
+      }
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -85,6 +120,10 @@ export default function Checkout() {
       const deliveryFee = 15;
       const total = subtotal + deliveryFee;
 
+      const cardLastFour = paymentMethod === "card" 
+        ? cardData.cardNumber.replace(/\D/g, '').slice(-4)
+        : null;
+
       const orderData = {
         order: {
           orderNumber,
@@ -98,6 +137,8 @@ export default function Checkout() {
           subtotal: subtotal.toFixed(2),
           deliveryFee: deliveryFee.toFixed(2),
           total: total.toFixed(2),
+          paymentMethod,
+          cardLastFour,
           status: "pending",
         },
         items: cartItems.map(item => ({
@@ -211,6 +252,86 @@ export default function Checkout() {
                           data-testid="input-checkout-instructions"
                         />
                       </div>
+                    </div>
+
+                    <Separator />
+
+                    <div className="space-y-4">
+                      <Label>Payment Method *</Label>
+                      <RadioGroup 
+                        value={paymentMethod} 
+                        onValueChange={(value: "cash" | "card") => setPaymentMethod(value)}
+                      >
+                        <div className="flex items-center space-x-3 border rounded-lg p-4 hover-elevate">
+                          <RadioGroupItem value="cash" id="cash" data-testid="radio-payment-cash" />
+                          <Label htmlFor="cash" className="flex items-center gap-2 cursor-pointer flex-1">
+                            <Banknote className="h-5 w-5 text-muted-foreground" />
+                            <span>Cash on Delivery</span>
+                          </Label>
+                        </div>
+                        <div className="flex items-center space-x-3 border rounded-lg p-4 hover-elevate">
+                          <RadioGroupItem value="card" id="card" data-testid="radio-payment-card" />
+                          <Label htmlFor="card" className="flex items-center gap-2 cursor-pointer flex-1">
+                            <CreditCard className="h-5 w-5 text-muted-foreground" />
+                            <span>Credit/Debit Card</span>
+                          </Label>
+                        </div>
+                      </RadioGroup>
+
+                      {paymentMethod === "card" && (
+                        <div className="space-y-4 pt-4 border-t">
+                          <div>
+                            <Label htmlFor="cardNumber">Card Number *</Label>
+                            <Input
+                              id="cardNumber"
+                              placeholder="xxxx-xxxx-xxxx-xxxx"
+                              value={cardData.cardNumber}
+                              onChange={(e) => setCardData({ 
+                                ...cardData, 
+                                cardNumber: formatCardNumber(e.target.value) 
+                              })}
+                              maxLength={19}
+                              data-testid="input-card-number"
+                            />
+                            {errors.cardNumber && <p className="text-sm text-destructive mt-1">{errors.cardNumber}</p>}
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="expiry">Expiry Date *</Label>
+                              <Input
+                                id="expiry"
+                                placeholder="MM/YYYY"
+                                value={cardData.expiry}
+                                onChange={(e) => setCardData({ 
+                                  ...cardData, 
+                                  expiry: formatExpiry(e.target.value) 
+                                })}
+                                maxLength={7}
+                                data-testid="input-card-expiry"
+                              />
+                              {errors.expiry && <p className="text-sm text-destructive mt-1">{errors.expiry}</p>}
+                            </div>
+
+                            <div>
+                              <Label htmlFor="cvv">CVV *</Label>
+                              <Input
+                                id="cvv"
+                                placeholder="XXX"
+                                type="password"
+                                value={cardData.cvv}
+                                onChange={(e) => setCardData({ 
+                                  ...cardData, 
+                                  cvv: e.target.value.replace(/\D/g, '').substring(0, 4) 
+                                })}
+                                maxLength={4}
+                                data-testid="input-card-cvv"
+                              />
+                              {errors.cvv && <p className="text-sm text-destructive mt-1">{errors.cvv}</p>}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <Button 

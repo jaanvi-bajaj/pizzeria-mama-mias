@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Leaf, ChefHat, Flame, Pizza, Salad, Wine } from "lucide-react";
 import heroImage from '@assets/generated_images/wood_fired_pizza_oven_3d7e9d1a.png';
+import wineImage from '@assets/generated_images/Italian_wine_bottles_display_e86e809a.png';
 import { useState, useEffect } from "react";
 
 export default function Home() {
@@ -107,19 +108,25 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-primary text-primary-foreground">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+      <section className="relative py-16 md:py-20 overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${wineImage})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/70 to-black/80"></div>
+        </div>
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
             Experience Our Full Restaurant App
           </h2>
-          <p className="text-lg mb-8 opacity-95">
+          <p className="text-lg mb-8 text-white/95">
             Browse our complete menu, make reservations, and manage your orders
           </p>
           <Link href="/menu">
             <Button 
               size="lg" 
               variant="outline" 
-              className="bg-white text-primary hover:bg-white/90"
+              className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white/20"
               data-testid="button-get-started"
             >
               Get Started

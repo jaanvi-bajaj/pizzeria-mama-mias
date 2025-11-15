@@ -5,7 +5,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, Clock, Truck, ChefHat, Package } from "lucide-react";
+import { CheckCircle2, Clock, Truck, ChefHat, Package, CreditCard, Banknote, PartyPopper } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import type { Order, OrderItem } from "@shared/schema";
 
@@ -137,17 +137,21 @@ export default function Confirmation() {
           <Card>
             <CardContent className="p-8 md:p-12">
               <div className="text-center mb-8">
-                <CheckCircle2 className="w-20 h-20 text-chart-2 mx-auto mb-6" />
+                <PartyPopper className="w-20 h-20 text-chart-2 mx-auto mb-6" />
                 
                 <h1 className="text-3xl md:text-4xl font-bold mb-2 text-foreground">
-                  Order Confirmed!
+                  Thank You!
                 </h1>
                 
                 <p className="text-lg text-muted-foreground mb-2">
-                  Thank you for your order, {order.customerName}!
+                  Your order has been confirmed, {order.customerName}!
                 </p>
                 
-                <div className="inline-block bg-accent px-6 py-3 rounded-md mb-8">
+                <p className="text-sm text-muted-foreground mb-4">
+                  We're preparing your delicious Italian meal with love and care.
+                </p>
+                
+                <div className="inline-block bg-accent px-6 py-3 rounded-md mb-4">
                   <p className="text-sm text-muted-foreground">Order Number</p>
                   <p className="text-2xl font-bold text-foreground" data-testid="text-order-number">
                     {order.orderNumber}
@@ -197,6 +201,35 @@ export default function Confirmation() {
                     <span>Total</span>
                     <span className="text-primary">AED {order.total}</span>
                   </div>
+                </div>
+              </div>
+
+              <div className="bg-muted/30 rounded-lg p-6 mb-8">
+                <h3 className="font-semibold mb-3">Payment Information</h3>
+                <div className="flex items-center gap-3 text-sm">
+                  {order.paymentMethod === "card" ? (
+                    <>
+                      <CreditCard className="w-5 h-5 text-muted-foreground" />
+                      <div>
+                        <p className="font-medium">Credit/Debit Card</p>
+                        {order.cardLastFour && (
+                          <p className="text-muted-foreground">
+                            Card ending in {order.cardLastFour}
+                          </p>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Banknote className="w-5 h-5 text-muted-foreground" />
+                      <div>
+                        <p className="font-medium">Cash on Delivery</p>
+                        <p className="text-muted-foreground">
+                          Please have exact amount ready
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
