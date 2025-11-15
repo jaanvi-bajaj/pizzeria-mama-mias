@@ -2,7 +2,7 @@
 
 ## Overview
 
-Mama Mia's Pizzeria is a full-stack restaurant website for an authentic Italian pizzeria in Dubai Marina. The application provides a complete online ordering system with menu browsing, cart management, checkout process, table reservations, and customer testimonials. Built with a modern React frontend and Express backend, it features real-time order tracking via WebSockets and a comprehensive design system following Italian restaurant aesthetics.
+Mama Mia's Pizzeria is a full-stack restaurant website for an authentic Italian pizzeria in Dubai Marina. The application provides a complete online ordering system with menu browsing, cart management, secure payment processing (cash and card), checkout process, table reservations, and customer testimonials. Built with a modern React frontend and Express backend, it features real-time order tracking via WebSockets, payment method selection with card details collection, and a comprehensive design system following Italian restaurant aesthetics with wine bottle imagery.
 
 ## User Preferences
 
@@ -50,7 +50,7 @@ Preferred communication style: Simple, everyday language.
 
 **Database Schema**:
 - `menu_items` - Product catalog with categories, pricing, images, and availability flags
-- `orders` - Order headers with customer information, delivery details, and status tracking
+- `orders` - Order headers with customer information, delivery details, payment method (cash/card), card last 4 digits (for card payments), and status tracking
 - `order_items` - Line items linking orders to menu items with quantities
 - `reservations` - Table booking requests with guest count and special requirements
 - `testimonials` - Customer reviews with approval workflow
@@ -115,4 +115,29 @@ Preferred communication style: Simple, everyday language.
 - **tsx** - TypeScript execution for development
 
 ### Asset Management
-Generated images are stored in `attached_assets/generated_images/` and imported via the image mapping system to ensure proper bundling and optimization.
+Generated images are stored in `attached_assets/generated_images/` and imported via the image mapping system to ensure proper bundling and optimization. Images include:
+- Wood-fired pizza oven for hero section
+- Italian wine bottles display for homepage CTA section
+
+## Recent Changes (November 2025)
+
+### Payment Processing Integration
+- **Payment Method Selection**: Added radio button selection between "Cash on Delivery" and "Credit/Debit Card" on checkout page
+- **Card Details Form**: When card payment is selected, displays secure input fields for:
+  - Card number (auto-formatted as xxxx-xxxx-xxxx-xxxx)
+  - Expiry date (auto-formatted as MM/YYYY)
+  - CVV (password-masked, 3-4 digits)
+- **Data Security**: Only last 4 digits of card number are stored in database; full card number never persists
+- **Database Schema Updates**: Added `paymentMethod` (default "cash") and `cardLastFour` (nullable) fields to orders table
+- **Confirmation Page Enhancements**: 
+  - Changed heading to "Thank You!" with party popper icon
+  - Added Payment Information section showing method and card details (if applicable)
+  - Displays "Card ending in XXXX" for card payments or "Please have exact amount ready" for cash
+
+### Visual Enhancements
+- **Wine Bottles Section**: Added authentic Italian wine bottles background image to homepage bottom CTA section
+- **Gradient Overlays**: Dark gradient ensures text readability over wine bottle imagery
+
+### Form Validation
+- **Payment Validation**: Ensures card number is 16 digits, expiry is valid MM/YYYY format, and CVV is 3-4 digits when card payment is selected
+- **Auto-formatting**: Card number and expiry date inputs auto-format as user types for better UX
