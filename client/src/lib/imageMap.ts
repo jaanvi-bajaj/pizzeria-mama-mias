@@ -12,6 +12,7 @@ import tiramisuImage from '@assets/generated_images/tiramisu_dessert_1d37e56a.pn
 import cannoliImage from '@assets/generated_images/cannoli_pastries_a410b18c.png';
 import sodaImage from '@assets/generated_images/italian_soda_4a76c162.png';
 import coffeeImage from '@assets/generated_images/cappuccino_coffee_9610f981.png';
+import wineBottlesImage from '@assets/generated_images/Italian_wine_bottles_display_2d07a85a.png';
 
 export const imageMap: Record<string, string> = {
   '/assets/margherita.png': margheritaImage,
@@ -27,5 +28,6 @@ export const imageMap: Record<string, string> = {
   '/assets/tiramisu.png': tiramisuImage,
   '/assets/cannoli.png': cannoliImage,
   '/assets/soda.png': sodaImage,
+  '/assets/wine.png': wineBottlesImage,
   '/assets/coffee.png': coffeeImage,
 };
